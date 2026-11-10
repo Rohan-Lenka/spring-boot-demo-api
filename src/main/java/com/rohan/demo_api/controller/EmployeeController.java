@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController  // under the hood, this has the @ResponseBody annotation which means
 // it automatically returns JSON responses.
 @RequestMapping("/employees")
-// this controller handles requests starting from /employee
+// this controller handles requests starting from /employees
 @RequiredArgsConstructor
 public class EmployeeController {
 
