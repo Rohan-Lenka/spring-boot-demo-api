@@ -2,7 +2,7 @@ package com.rohan.demo_api.service;
 
 import com.rohan.demo_api.dto.AddEmployeeRequestDto;
 import com.rohan.demo_api.dto.EmployeeDto;
-import com.rohan.demo_api.entity.EmployeeEntity;
+import com.rohan.demo_api.entity.Employee;
 import com.rohan.demo_api.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -45,7 +45,7 @@ public class EmployeeService {
     }
 
     public EmployeeDto addEmployee(AddEmployeeRequestDto employeeDto) {
-        var newEmployee = modelMapper.map(employeeDto, EmployeeEntity.class);
+        var newEmployee = modelMapper.map(employeeDto, Employee.class);
         var addedEmployee = employeeRepository.save(newEmployee);
         return modelMapper.map(addedEmployee, EmployeeDto.class);
     }
@@ -62,7 +62,7 @@ public class EmployeeService {
                 .findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Employee with id " + id + " does not exist"));
         updates.forEach((key, value) -> {
-            var field = ReflectionUtils.findField(EmployeeEntity.class, key);
+            var field = ReflectionUtils.findField(Employee.class, key);
             if (field != null) {
                 field.setAccessible(true);
                 ReflectionUtils.setField(field, employee, value);

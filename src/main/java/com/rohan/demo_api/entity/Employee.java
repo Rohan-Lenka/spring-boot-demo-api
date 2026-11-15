@@ -12,7 +12,7 @@ import lombok.Getter;
 // IMP -> modelMapper requires Getters, Setters and a no Arg Constructor for a class which is used as target
 // in modelMapper.map(). @Data covers all of them. The no Arg Constructor comes from @RequiredArgsConstructor
 // which is included in the @Data
-public class EmployeeEntity {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
