@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.Set;
+
 @Entity
 // annotation for defining db entities (schemas).
 @Getter
@@ -23,4 +26,24 @@ public class Employee {
     private String email;
 
     private int salary;
+
+    @OneToOne
+    @JoinColumn(name = "address_id")  // this is the owner side.
+    // name in @JoinColumn will be the name of the column u want in the db.
+    private Address address;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Task> task;
+    // As this is the inverse side, no list of tasks are really stored here.
+    // This will just be used for querying.
+
+    @OneToOne
+    @JoinColumn(name = "main_task")
+    private Task mainTask;
+
+    // Two entities can have multiple relations between them
+    // Eg -> We have 2 relations between Employee and Task.
+
+    @ManyToMany(mappedBy = "employees")
+    private Set<Team> teams;
 }

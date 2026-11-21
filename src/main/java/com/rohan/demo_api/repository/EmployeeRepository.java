@@ -39,6 +39,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     // Object[] coz the query returns name(String) and count(Number).
 
     @Transactional
+    // This is a very imp annotation which should be used with caution. Proper docs and manual for this ->
+    // https://dev.to/gianfcop98/transactions-in-spring-boot-what-transactional-really-does-and-why-it-matters-56a6
+    // https://medium.com/@anil.goyal0057/transaction-propagation-in-spring-boot-required-vs-requires-new-with-real-use-cases-9eae38a14e96
+    // https://www.reddit.com/r/SpringBoot/comments/1slsqbk/why_shouldnt_we_use_transactional_every_time/
     @Modifying
     // Both of these annotations are required when update type queries are executed.
     @Query("UPDATE Employee e SET e.name = :newName WHERE e.id = :id")
