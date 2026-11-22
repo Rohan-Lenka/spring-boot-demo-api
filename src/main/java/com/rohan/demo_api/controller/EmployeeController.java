@@ -2,6 +2,7 @@ package com.rohan.demo_api.controller;
 
 import com.rohan.demo_api.dto.AddEmployeeRequestDto;
 import com.rohan.demo_api.dto.EmployeeDto;
+import com.rohan.demo_api.entity.Employee;
 import com.rohan.demo_api.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,4 +62,14 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable String id, @RequestBody Map<String, Object> updates) {
         return ResponseEntity.ok(employeeService.updateEmployee(id, updates));
     }
+
+    // IMP
+    @GetMapping("/test/{id}")
+    public ResponseEntity<Employee> tmp(@PathVariable String id) {
+        return ResponseEntity.ok(employeeService.tmp(id));
+    }
+    // This will return an infinitely recursive JSON object and cause memory leaks.
+    // Reason -> Jackson serializing the bidirectional entity relationships:
+    // • Employee.address → Address.employee → Employee…
+    // • Employee.task or Employee.mainTask → Task.employee → Employee…
 }

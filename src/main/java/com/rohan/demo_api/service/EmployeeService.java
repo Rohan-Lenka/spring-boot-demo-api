@@ -2,8 +2,10 @@ package com.rohan.demo_api.service;
 
 import com.rohan.demo_api.dto.AddEmployeeRequestDto;
 import com.rohan.demo_api.dto.EmployeeDto;
+import com.rohan.demo_api.entity.Address;
 import com.rohan.demo_api.entity.Employee;
 import com.rohan.demo_api.repository.EmployeeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -44,10 +46,21 @@ public class EmployeeService {
         return employee != null ? modelMapper.map(employee, EmployeeDto.class) : null;
     }
 
+    @Transactional
     public EmployeeDto addEmployee(AddEmployeeRequestDto employeeDto) {
-        var newEmployee = modelMapper.map(employeeDto, Employee.class);
-        var addedEmployee = employeeRepository.save(newEmployee);
-        return modelMapper.map(addedEmployee, EmployeeDto.class);
+        var employeeAddress = Address.builder()  // use .builder() like this after adding @Builder.
+                .state(employeeDto.getState())
+                .city(employeeDto.getCity())
+                .build();
+        var newEmployee = Employee.builder()
+                .name(employeeDto.getName())
+                .email(employeeDto.getEmail())
+                .salary(employeeDto.getSalary())
+                .address(employeeAddress)
+                .build();
+        employeeRepository.save(newEmployee);
+        // address also saved automatically due to cascading.
+        return modelMapper.map(newEmployee, EmployeeDto.class);
     }
 
     public void deleteEmployee(String id) {
@@ -73,5 +86,16 @@ public class EmployeeService {
         // each function to view their details.
         var updatedEmployee = employeeRepository.save(employee);
         return modelMapper.map(updatedEmployee, EmployeeDto.class);
+    }
+
+    // IMP
+    public Employee tmp(String id) {
+        var employee = employeeRepository.findById(id).orElse(null);
+        // System.out.println(employee);
+        // This will cause stack overflow & memory leaks. Reason ->
+        // System.out.println(employee) calls Lombok’s generated toString() because @Data generates one.
+        // It includes the entity relationships, which can lead back to the (Employee → Address → Employee...)
+        // until the stack overflows.
+        return employee;
     }
 }

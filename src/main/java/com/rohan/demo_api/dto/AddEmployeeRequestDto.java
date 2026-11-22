@@ -1,9 +1,6 @@
 package com.rohan.demo_api.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
@@ -17,5 +14,13 @@ public class AddEmployeeRequestDto {
     @NotBlank(message = "Email is required")
     private String email;
 
+    @Positive(message = "Salary can't be negative or missing")
+    // Can't use @NotBlank here coz it is for strings. Another solution -> make salary an Integer and add @NotNull.
     private int salary;
+
+    @NotBlank(message = "State is required")
+    private String state;
+
+    @NotBlank(message = "City is required")
+    private String city;
 }
