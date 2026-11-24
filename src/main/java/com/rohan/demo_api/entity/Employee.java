@@ -39,6 +39,9 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     // more about fetch on -> https://stackoverflow.com/questions/2990799/difference-between-fetchtype-lazy-and-eager-in-java-persistence-api
+    // Defaults of fetch :- [IMP]
+    // OneToOne & ManyToOne -> Eager
+    // OneToMany & ManyToMany -> Lazy
     // IMP -> Know about N+1 query problem due to lazy fetching in N+1_query_problem.txt file present at root folder.
     private List<Task> tasks;
     // As this is the inverse side, no list of tasks are really stored here.
