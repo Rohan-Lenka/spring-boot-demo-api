@@ -1,0 +1,22 @@
+In our Schema, we have a relation of one-to-many between Employee and Task.
+Due to lazy fetching, when we use JPA methods to fetch students, tasks won't be fetched for them (which is good and intended).
+
+PROBLEM :-
+However, if we want to fetch the tasks associated with a specific employee(s), we will encounter a problem.
+Eg -> Lets say we want to fetch N employees along with their associated tasks.
+So the flow would be :-
+var employees = employeeRepository.findAll(); // Fetch N employees, this is 1 DB QUERY.
+for (var e : employees) {
+    taskrepository.findByEmployeeId(e.getId()); // Fetch tasks for each employee, this is N DB QUERIES.
+}
+A total of N+1 queries will be executed, which is inefficient and can lead to performance issues.
+To solve the N+1 query problem, we can use a few different strategies:
+
+SOLUTION :-
+1) One solution is to write your custom JPQL/SQL query without relying on JPA methods.
+2) Inside the Employee Repository,
+   @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "tasks")
+   // in attributePaths = {"field1", "field2", ...}, pass all the fields you wanna fetch Eagerly.
+   List<Task> findAll();
+
+For more info, https://medium.com/geekculture/jpa-entitygraphs-a-solution-to-n-1-query-problem-e29c28abe5fb
