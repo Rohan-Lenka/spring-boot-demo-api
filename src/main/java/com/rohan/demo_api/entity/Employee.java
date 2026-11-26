@@ -33,6 +33,7 @@ public class Employee {
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     // PERSIST -> When u want address to be automatically be saved and commited in the db when employee is created.
     // REMOVE -> When u want an employee's address to be automatically removed from the db when that employee is removed.
+    // Pitfalls of CascadeType.REMOVE in -ToMany relations -> https://thorben-janssen.com/avoid-cascadetype-delete-many-assocations/
     @JoinColumn(name = "address_id")  // this is the owner side.
     // name in @JoinColumn will be the name of the column u want in the db.
     private Address address;
